@@ -1,8 +1,22 @@
 import Navbar from "./Navbar";
-import { mockEmployees } from "./data/Home";
+// import { mockEmployees } from "./data/Home";
 import { Link } from "react-router-dom"
+import axios from "axios";
+import { useState , useEffect } from "react";
 
 function HomeUser() {
+  const Api = "https://jsd5-mock-backend.onrender.com/"
+  const [employees , setEmployees] = useState([])
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await axios.get(`${Api}members`);
+      setEmployees(response.data);
+    };
+    // line 17 เป็นการ return ตัวแปร getData มาใช้
+    getData();
+  },[]);
+
   return (
     <div>
       <Navbar />
@@ -28,13 +42,16 @@ function HomeUser() {
             <th className="border-2 border-black w-[15rem]">Last Name</th>
             <th className="border-2 border-black w-[15rem]">Position</th>
           </tr>
-          {mockEmployees.map((items, index) => (
-            <tr key={index}>
-              <td className="border-2 border-black">{items.name}</td>
-              <td className="border-2 border-black">{items.lastname}</td>
-              <td className="border-2 border-black">{items.position}</td>
+
+      {/* map Api employee ใน map เป็นการตั้งชื่อยังไงก็ได้ให้เราเข้าใจ และสั่งให้มันไปเอาค่าที่เราต้องการจาก api มาใช้*/}
+          {employees.map((employee) => (
+            <tr key={employee.id}>
+              <td className="border-2 border-black">{employee.name}</td>
+              <td className="border-2 border-black">{employee.lastname}</td>
+              <td className="border-2 border-black">{employee.position}</td>
             </tr>
           ))}
+
         </table>
       </div>
     </div>
